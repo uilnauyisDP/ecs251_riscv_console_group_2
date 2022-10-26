@@ -9,6 +9,7 @@ uint32_t getStatus(void);
 volatile uint32_t *SPRITE_CONTROLS[128];
 volatile uint32_t *SPRITE_PALETTE = (volatile uint32_t *)(0x500FD000);
 volatile uint32_t *MODE_CTRL_REG = (volatile uint32_t *)(0x50000000 + 0xFF414);
+volatile uint32_t *INT_PEND_REG = (volatile uint32_t *)(0x40000004);
 
 int main() {
     int last_global = 42;
@@ -31,6 +32,11 @@ int main() {
     int control_idx = 0;
 
     while (1) {
+        // If CMD is pressed, clear the monitor (set black color)
+        if ((*INT_PEND_REG & 0x4) >> 2){
+            SPRITE_PALETTE[0] = 0x80000000;
+            break;
+        }
         global = getTicks();
         if(global != last_global){
             controller_status = getStatus();

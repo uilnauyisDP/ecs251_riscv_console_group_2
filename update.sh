@@ -1,7 +1,7 @@
-cd riscv-example/
+cd firmware/
 make clean
 make
-cd ../riscv-cart/
+cd ../app/
 make clean
 make
 cd .

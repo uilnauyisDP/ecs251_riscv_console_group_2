@@ -36,6 +36,8 @@ __attribute__((always_inline)) inline void csr_disable_interrupts(void){
 #define MTIMECMP_LOW    (*((volatile uint32_t *)0x40000010))
 #define MTIMECMP_HIGH   (*((volatile uint32_t *)0x40000014))
 #define CONTROLLER      (*((volatile uint32_t *)0x40000018))
+int rand(void);
+static unsigned long int next = 1;
 
 void init(void){
     uint8_t *Source = _erodata;
@@ -70,27 +72,6 @@ void c_interrupt_handler(uint32_t mcause){
     MTIMECMP_LOW = NewCompare;
     global++;
     controller_status = CONTROLLER;
-    // When command interrupt occurs, disable VIE and set to graphic mode
-    if (((*INT_PEND_REG) & 0x4) >> 2){
-        if (*INT_ENABLE_REG = 0x6){
-            *INT_ENABLE_REG = 0x4;
-        }
-        *MODE_CTRL_REG = 0x1;
-        // Clear CMIP by setting 1
-        (*INT_PEND_REG) |= 0x4;
-    }
-    
-    // When video interrupt occurs, switch between text mode and graphic mode
-    if (((*INT_ENABLE_REG) == 0x6) & ((*INT_PEND_REG) & 0x2) >> 1){
-        if (*MODE_CTRL_REG == 0x0){
-            *MODE_CTRL_REG = 0x1;
-        }
-        else if (*MODE_CTRL_REG == 0x1){
-            *MODE_CTRL_REG = 0x0;
-        }
-        // Clear VIP by setting 1
-        (*INT_PEND_REG) |= 0x2;
-    }
 }
 
 uint32_t c_system_call(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, uint32_t call){
@@ -100,6 +81,16 @@ uint32_t c_system_call(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3, uint3
     else if(call == 1){
         return CONTROLLER;
     }
+    else if (call == 2){
+        int r = rand();
+        return r;
+    }
     return -1;
+}
+
+int rand(void)
+{
+    next = ((next * 214013L + 2531011L) >> 16) & 0x7fff;
+    return next;
 }
 

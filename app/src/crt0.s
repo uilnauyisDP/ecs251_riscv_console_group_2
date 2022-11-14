@@ -16,7 +16,7 @@ _start:
     
 
 .section .text, "ax"
-.global getTicks, getStatus, genRandom
+.global getTicks, getStatus, genRandom, CalcSmallSpriteControl
 getTicks:
     li a5, 0
     ecall
@@ -25,5 +25,8 @@ getStatus:
     ecall
 genRandom:
     li a5, 2
+    ecall
+CalcSmallSpriteControl:
+    li a5, 3
     ecall
 .end

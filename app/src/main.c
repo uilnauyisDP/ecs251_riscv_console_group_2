@@ -1,22 +1,13 @@
 #include <stdint.h>
-#include <stdlib.h>
-#include <time.h>
+#include "api.h"
 
 volatile int global = 42;
 volatile uint32_t controller_status = 0;
-
-uint32_t getTicks(void);
-uint32_t getStatus(void);
-uint32_t genRandom(void);
-
 volatile uint32_t *SPRITE_CONTROLS[128];
 volatile uint8_t *SPRITE_DATAS[128];
 volatile uint32_t *SPRITE_PALETTE = (volatile uint32_t *)(0x500FD000);
 volatile uint32_t *MODE_CTRL_REG = (volatile uint32_t *)(0x500FF414);
 volatile char *VIDEO_MEMORY = (volatile char *)(0x500FE800);
-
-uint32_t CalcSmallSpriteControl(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t p);
-
 
 int main() {
     int last_global = 42;
@@ -66,7 +57,7 @@ int main() {
     int x = 255;
     int y = 255;
     int alive = 1;
-    
+
     while (alive == 1) {
         global = getTicks();
         if(global != last_global){
@@ -111,8 +102,8 @@ int main() {
             }
             if ((cur_x < center_x + 10) & (cur_y < center_y + 10) & (cur_x > center_x - 10) & (cur_y > center_y - 10) & budget <= 129){
                 budget += 3;
-                pellet_x = genRandom() % 512;
-                pellet_y = genRandom() % 288;
+                pellet_x = genRandom(512);
+                pellet_y = genRandom(288);
                 SPRITE_CONTROLS[0][0] = CalcSmallSpriteControl(pellet_x,pellet_y,8,8,0);
                 center_x = pellet_x + 4;
                 center_y = pellet_y + 4;
@@ -152,9 +143,4 @@ int main() {
     VIDEO_MEMORY[10] = '!';
     VIDEO_MEMORY[11] = '!';
     return 0;
-}
-
-
-uint32_t CalcSmallSpriteControl(int32_t x, int32_t y, uint32_t w, uint32_t h, uint32_t p){
-    return ((h-1)<<25) | ((w-1)<<21) | ((y+16)<<12) | ((x+16)<<2) | p;
 }

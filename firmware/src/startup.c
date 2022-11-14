@@ -36,8 +36,12 @@ __attribute__((always_inline)) inline void csr_disable_interrupts(void){
 #define MTIMECMP_LOW    (*((volatile uint32_t *)0x40000010))
 #define MTIMECMP_HIGH   (*((volatile uint32_t *)0x40000014))
 #define CONTROLLER      (*((volatile uint32_t *)0x40000018))
+
 int rand(int high);
-uint32_t CalcSmallSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p);
+uint32_t calcSmallSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p);
+void setGraphicsMode(void);
+void setTextMode(void);
+
 static unsigned long int next = 1;
 
 void init(void){
@@ -87,8 +91,14 @@ uint32_t c_system_call(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3, uint3
         return r;
     }
     else if (call == 3){
-        uint32_t r = CalcSmallSpriteControl(a0, a1, a2, a3, a4);
+        uint32_t r = calcSmallSpriteControl(a0, a1, a2, a3, a4);
         return r;
+    }
+    else if (call == 4){
+        setGraphicsMode();
+    }
+    else if (call == 5){
+        setTextMode();
     }
     return -1;
 }
@@ -99,6 +109,14 @@ int rand(int high)
     return next % high;
 }
 
-uint32_t CalcSmallSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p){
+uint32_t calcSmallSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p){
     return ((h-1)<<25) | ((w-1)<<21) | ((y+16)<<12) | ((x+16)<<2) | p;
+}
+
+void setGraphicsMode(){
+    *MODE_CTRL_REG |= 0x1;
+}
+
+void setTextMode(){
+    *MODE_CTRL_REG &= 0x0;
 }

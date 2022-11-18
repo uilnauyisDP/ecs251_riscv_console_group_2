@@ -41,6 +41,7 @@ int rand(int high);
 uint32_t calcSmallSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p);
 void setGraphicsMode(void);
 void setTextMode(void);
+void setColor(int palette_id, int entry_id, uint32_t rgba);
 
 static unsigned long int next = 1;
 
@@ -100,6 +101,9 @@ uint32_t c_system_call(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3, uint3
     else if (call == 5){
         setTextMode();
     }
+    else if (call == 6){
+        setColor(a0, a1, a2);
+    }
     return -1;
 }
 
@@ -119,4 +123,9 @@ void setGraphicsMode(){
 
 void setTextMode(){
     *MODE_CTRL_REG &= 0x0;
+}
+
+void setColor(int palette_id, int entry_id, uint32_t rgba){
+    volatile uint32_t *SPRITE_PALETTE = (volatile uint32_t *)(0x500FD000 + 1024 * palette_id);
+    SPRITE_PALETTE[entry_id] = rgba;
 }

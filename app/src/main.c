@@ -15,6 +15,7 @@ int checkGetPellet(int cur_x, int cur_y, int center_x, int center_y, int budget)
 void initSpriteControllers(void);
 void initSpriteData(void);
 void drawPellet(void);
+void setColor(int palette_id, int entry_id, uint32_t rgba);
 
 int main() {
     int last_global = 42;
@@ -22,9 +23,9 @@ int main() {
     initSpriteData();
     setGraphicsMode();
     // Set color to sprite palette
-    SPRITE_PALETTE[0] = 0x8000A65F;
-    SPRITE_PALETTE[1] = 0x80FFFFFF;
-    SPRITE_PALETTE[2] = 0x80000000;
+    setColor(0, 0, 0x8000A65F);
+    setColor(0, 1, 0x80FFFFFF);
+    setColor(0, 2, 0x80000000);
     int pellet_x = 100;
     int pellet_y = 100;
     int center_x = pellet_x + 4;

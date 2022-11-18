@@ -16,7 +16,7 @@ _start:
     
 
 .section .text, "ax"
-.global getTicks, getStatus, genRandom, calcSmallSpriteControl, setGraphicsMode, setTextMode
+.global getTicks, getStatus, genRandom, calcSmallSpriteControl, setGraphicsMode, setTextMode, setColor
 getTicks:
     li a5, 0
     ecall
@@ -34,5 +34,8 @@ setGraphicsMode:
     ecall
 setTextMode:
     li a5, 5
+    ecall
+setColor:
+    li a5, 6
     ecall
 .end

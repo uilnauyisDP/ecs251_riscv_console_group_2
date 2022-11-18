@@ -1,5 +1,7 @@
 #include <stdint.h>
 #include "api.h"
+#include <stdlib.h>
+#include <string.h>
 
 #define SMALL_SPRITE_CTRL_OFFSET 16
 
@@ -105,18 +107,21 @@ int main() {
         }
     }
     setTextMode();
-    VIDEO_MEMORY[0] = 'G';
-    VIDEO_MEMORY[1] = 'A';
-    VIDEO_MEMORY[2] = 'M';
-    VIDEO_MEMORY[3] = 'E';
-    VIDEO_MEMORY[4] = ' ';
-    VIDEO_MEMORY[5] = 'O';
-    VIDEO_MEMORY[6] = 'V';
-    VIDEO_MEMORY[7] = 'E';
-    VIDEO_MEMORY[8] = 'R';
-    VIDEO_MEMORY[9] = '!';
-    VIDEO_MEMORY[10] = '!';
-    VIDEO_MEMORY[11] = '!';
+    char *ptr = malloc(12);
+    ptr[0] = 'G';
+    ptr[1] = 'A';
+    ptr[2] = 'M';
+    ptr[3] = 'E';
+    ptr[4] = ' ';
+    ptr[5] = 'O';
+    ptr[6] = 'V';
+    ptr[7] = 'E';
+    ptr[8] = 'R';
+    ptr[9] = '!';
+    ptr[10] = '!';
+    ptr[11] = '!';
+    ptr[12] = '\0';
+    strcpy(VIDEO_MEMORY, ptr);
     return 0;
 }
 
@@ -158,4 +163,27 @@ void drawPellet(){
             SPRITE_DATAS[0][(y<<4) + x] = ((x >= 3) & (x <= 5) & (y >= 0) & (y <= 8)) | ((x >= 2) & (x <= 6) & (y >= 3) & (y <= 5)) ? 1 : 2;
         }
     }
+}
+
+char *_sbrk(int incr) {
+    extern char _heap[];
+    extern char _stack[];
+    static char *heap_end;
+    char *prev_heap_end;
+
+    if (heap_end == 0) {
+        heap_end = &_heap;
+    }
+    prev_heap_end = heap_end;
+    if (heap_end + incr > &_stack) {
+        write (1, "Heap and stack collision\n", 25);
+        abort ();    
+    }
+
+    heap_end += incr;
+    return (char *) prev_heap_end;
+}
+
+int _write(int fd, void *buf, size_t len) {
+    return 0;
 }

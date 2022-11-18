@@ -39,6 +39,8 @@ __attribute__((always_inline)) inline void csr_disable_interrupts(void){
 
 int rand(int high);
 uint32_t calcSmallSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p);
+uint32_t calcLargeSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p);
+uint32_t calcBackgroundControl(uint32_t x, uint32_t y, uint32_t z, uint32_t p);
 void setGraphicsMode(void);
 void setTextMode(void);
 void setColor(int palette_id, int entry_id, uint32_t rgba);
@@ -92,17 +94,25 @@ uint32_t c_system_call(uint32_t a0, uint32_t a1, uint32_t a2, uint32_t a3, uint3
         return r;
     }
     else if (call == 3){
+        setGraphicsMode();
+    }
+    else if (call == 4){
+        setTextMode();
+    }
+    else if (call == 5){
+        setColor(a0, a1, a2);
+    }
+    else if (call == 6){
         uint32_t r = calcSmallSpriteControl(a0, a1, a2, a3, a4);
         return r;
     }
-    else if (call == 4){
-        setGraphicsMode();
+    else if (call == 7){
+        uint32_t r = calcLargeSpriteControl(a0, a1, a2, a3, a4);
+        return r;
     }
-    else if (call == 5){
-        setTextMode();
-    }
-    else if (call == 6){
-        setColor(a0, a1, a2);
+    else if (call == 8){
+        uint32_t r = calcBackgroundControl(a0, a1, a2, a3);
+        return r;
     }
     return -1;
 }
@@ -115,6 +125,14 @@ int rand(int high)
 
 uint32_t calcSmallSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p){
     return ((h-1)<<25) | ((w-1)<<21) | ((y+16)<<12) | ((x+16)<<2) | p;
+}
+
+uint32_t calcLargeSpriteControl(uint32_t x, uint32_t y, uint32_t w, uint32_t h, uint32_t p){
+    return ((h-33)<<26) | ((w-33)<<21) | ((y+64)<<12) | ((x+64)<<2) | p;
+}
+
+uint32_t calcBackgroundControl(uint32_t x, uint32_t y, uint32_t z, uint32_t p){
+    return ((z<<22) | ((y+288)<<12) | ((x+512)<<2)) | p;
 }
 
 void setGraphicsMode(){

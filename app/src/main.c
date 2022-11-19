@@ -7,8 +7,20 @@
 volatile int global = 42;
 volatile uint32_t controller_status = 0;
 volatile char *VIDEO_MEMORY = (volatile char *)(0x500FE800);
+volatile uint32_t *SMALL_SPRITE_CONTROL = (volatile uint32_t *)(0x500FF214);
 
 int main() {
+    setGraphicsMode();
+    setColor(0, 0, 0x8000A65F);
+    *SMALL_SPRITE_CONTROL = calcSmallSpriteControl(genRandom(512), genRandom(288), 10, 6, 0);
+
+    while (1){
+        controller_status = getStatus();
+        if (controller_status & 0x2){
+            break;
+        }
+    }
+    setTextMode();
     char *ptr = malloc(12);
     ptr[0] = 'H';
     ptr[1] = 'E';

@@ -21,20 +21,29 @@ extern volatile uint32_t running_flag;
 
 void initVideoSetting()
 {
+
+
     setGraphicsMode();
+
     initBackgroundPalette(0, bird_color_palette, 888);
-    //initSpritePalette(1, bird_color_palette, 888);
-    //initTransparentSpritePalette(0);
+    initSpritePalette(1, bird_color_palette, 888);
+    initTransparentSpritePalette(0);
+
 
     setBackgroundControl(0, 0, 0, 0, 0);
-    //setLargeSpriteControl(0, 64, 64, 30, 30, 1);
-    //setLargeSpriteControl(1, 64, 64, 0, 0, 0);
-    //setLargeSpriteControl(2, 64, 64, 0, 0, 0);
-    setBackgroundDataImage(0, bird_background_img);
+    setLargeSpriteControl(0, 64, 64, 30, 30, 1);
+    setLargeSpriteControl(1, 64, 64, 0, 0, 0);
+    setLargeSpriteControl(2, 64, 64, 0, 0, 0);
 
-    //setLargeSpriteDataImage(0, bird_img_0);
-    //setLargeSpriteDataImage(1, bird_img_1);
-    //setLargeSpriteDataImage(2, bird_img_2);
+
+    setLargeSpriteDataImage(0, bird_img_0);
+    setLargeSpriteDataImage(1, bird_img_1);
+    setLargeSpriteDataImage(2, bird_img_2);
+
+    //setBackgroundDataImage(0, bird_background_img);
+
+
+
 }
 
 

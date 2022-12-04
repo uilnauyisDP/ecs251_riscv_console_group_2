@@ -17,6 +17,10 @@ int writeIndexedTarget(uint32_t offset, uint32_t mem_size, uint32_t idx, uint8_t
 int setBackgroundDataImage(uint32_t idx, uint8_t * addr);
 int initBackgroundPalette(uint32_t idx, uint8_t * addr, uint32_t mem_len);
 void setBackgroundControl(uint32_t idx, uint32_t x, uint32_t y, uint32_t z, uint32_t palette);
+void setLargeSpriteControl(uint32_t idx, uint32_t h, uint32_t w, uint32_t x, uint16_t y, uint32_t palette);
+int initSpritePalette(uint32_t idx, uint8_t * addr, uint32_t mem_len);
+int setLargeSpriteDataImage(uint32_t idx, uint8_t * addr);
+int initTransparentSpritePalette(uint32_t idx);
 
 #define DISPLAY_MODE_TEXT 0
 #define DISPLAY_MODE_GRAPHICS 1

@@ -28,26 +28,32 @@ int main()
         global = getTicks();
         if (global != last_time)
         {
+            birdFly(&x_pos, &y_pos);
+
             controller_status = getStatus();
             if (controller_status)
             {
-                threadGraphics(&x_pos, &y_pos);
+                birdMove(&x_pos, &y_pos);
             }
         }
         last_time = global;
     }
-
-    //threadGraphics();
 }
 
-void threadGraphics(int *x_pos, int *y_pos)
+void birdFly(int *x_pos, int *y_pos) {
+    for (int i = 0; i < 3; i++)
+    {
+        setLargeSpriteControl(i, 64, 64, *x_pos, *y_pos, i == global % 3);
+    }
+}
+
+void birdMove(int *x_pos, int *y_pos)
 {
     int sprite_inc_x;
     int sprite_inc_y;
     int move_speed = 5;
     sprite_inc_x = 0;
     sprite_inc_y = 0;
-
     if (controller_status & 0x1)
     {
         sprite_inc_x = -move_speed;

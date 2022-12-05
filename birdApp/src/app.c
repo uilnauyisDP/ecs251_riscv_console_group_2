@@ -67,7 +67,7 @@ void initVideoSetting()
     initTransparentSpritePalette(0);
 
     setBackgroundControl(0, 0, 0, 0, 0);
-    setLargeSpriteControl(0, 64, 64, INIT_Y, INIT_Y, 1);
+    setLargeSpriteControl(0, 64, 64, INIT_X, INIT_Y, 1);
     setLargeSpriteControl(1, 64, 64, 0, 0, 0);
     setLargeSpriteControl(2, 64, 64, 0, 0, 0);
 

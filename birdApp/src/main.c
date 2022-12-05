@@ -6,6 +6,8 @@
 volatile int global = 42;
 volatile uint32_t controller_status = 0;
 volatile uint32_t running_flag = 1;
+extern int INIT_Y;
+extern int INIT_X;
 
 struct position
 {
@@ -14,13 +16,14 @@ struct position
 };
 
 void initVideoSetting();
+void showGamerOverSprite();
 
 int main()
 {
     initVideoSetting();
 
-    int x_pos = 30;
-    int y_pos = 30;
+    int x_pos = INIT_X;
+    int y_pos = INIT_Y;
     uint32_t last_time = 0;
     uint32_t last_time_2 = 0;
     int move_frequency = 3;
@@ -30,6 +33,7 @@ int main()
         global = getTicks();
         if (global != last_time)
         {
+            movePillars();
             birdFly(&x_pos, &y_pos);
 
             controller_status = getStatus();
@@ -43,6 +47,8 @@ int main()
                 birdFall(&x_pos, &y_pos);
                 last_time_2 = global;
             }
+
+            birdCollide(&x_pos, &y_pos);
         }
         last_time = global;
     }
@@ -93,5 +99,20 @@ void birdFall(int *x_pos, int *y_pos)
     for (int i = 0; i < 3; i++)
     {
         setLargeSpriteControl(i, 64, 64, *x_pos, *y_pos, i == global % 3);
+    }
+}
+
+void birdCollide(int *x_pos, int *y_pos)
+{
+    for (int j = 0; j < 6; j++)
+    {
+        if (calculateCollision(*x_pos, *y_pos, j) == 1)
+        {
+            // deal with collision
+            running_flag = 0;
+            // show up the "game over" sprites.
+            showGamerOverSprite();
+            // linePrintf(14, "collision has occurred: %d,%d,pillar_index=%d                    ", bird_x, bird_y, j);
+        }
     }
 }

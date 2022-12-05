@@ -22,6 +22,8 @@ int main()
     int x_pos = 30;
     int y_pos = 30;
     uint32_t last_time = 0;
+    uint32_t last_time_2 = 0;
+    int move_frequency = 3;
 
     while (running_flag)
     {
@@ -35,12 +37,19 @@ int main()
             {
                 birdMove(&x_pos, &y_pos);
             }
+
+            if (global - last_time_2 >= move_frequency)
+            {
+                birdFall(&x_pos, &y_pos);
+                last_time_2 = global;
+            }
         }
         last_time = global;
     }
 }
 
-void birdFly(int *x_pos, int *y_pos) {
+void birdFly(int *x_pos, int *y_pos)
+{
     for (int i = 0; i < 3; i++)
     {
         setLargeSpriteControl(i, 64, 64, *x_pos, *y_pos, i == global % 3);
@@ -76,5 +85,13 @@ void birdMove(int *x_pos, int *y_pos)
     {
         setLargeSpriteControl(i, 64, 64, *x_pos, *y_pos, i == global % 3);
     }
-    // threadYield();
+}
+
+void birdFall(int *x_pos, int *y_pos)
+{
+    *y_pos += 3;
+    for (int i = 0; i < 3; i++)
+    {
+        setLargeSpriteControl(i, 64, 64, *x_pos, *y_pos, i == global % 3);
+    }
 }

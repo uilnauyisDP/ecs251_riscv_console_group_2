@@ -16,6 +16,6 @@ if __name__ == "__main__":
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
     
-    os.system('tar czvf bin/project_phase3_group1_handover.tgz ' + ' '.join(target_folders))
+    os.system('tar czvf bin/project_phase4_game_on_group_2_os_handover.tgz ' + ' '.join(target_folders))
 
     

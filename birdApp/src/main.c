@@ -20,7 +20,8 @@ void showGamerOverSprite();
 
 int main()
 {
-    initVideoSetting();
+    if (running_flag)
+        initVideoSetting();
 
     int x_pos = INIT_X;
     int y_pos = INIT_Y;
